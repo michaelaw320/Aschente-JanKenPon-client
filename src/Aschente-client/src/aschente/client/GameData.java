@@ -18,6 +18,7 @@
 
 package aschente.client;
 
+import java.awt.Image;
 import java.util.ArrayList;
 
 /**
@@ -30,6 +31,7 @@ public class GameData {
     public static ArrayList<String> RoomList;
     public static String RoomName;
     public static int Round; 
+    public static Image background_image = ImageLoader.getImage("Background");
     
     /**
      * Reset dataPlayer dan dataMap

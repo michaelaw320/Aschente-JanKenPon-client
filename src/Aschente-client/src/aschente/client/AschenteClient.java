@@ -18,10 +18,15 @@
 
 package aschente.client;
 
+import aschente.GUI.*;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import aschente.GUI.*;
+import javax.swing.JLabel;
 
 /**
  *
@@ -62,9 +67,11 @@ public class AschenteClient {
         gameFrame.pack();
         gameFrame.setSize(new Dimension(ResolutionWidth,ResolutionHeight));
         gameFrame.setLocationRelativeTo(null);
-        gameFrame.setResizable(false);
+        gameFrame.setResizable(true);
         gameFrame.setVisible(true);
-            
+        try {
+            gameFrame.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("Images\\Scene_of_disboard.png")))));
+        } catch (IOException ex) {}
     }
     
         /**

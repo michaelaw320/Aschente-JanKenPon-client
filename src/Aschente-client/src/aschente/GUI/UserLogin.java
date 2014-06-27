@@ -31,13 +31,14 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 
 /**
  *
  * @author Michael
  */
 public class UserLogin extends Scene implements MouseListener, ActionListener, WindowListener, KeyListener {
+    
+    JButton X;
     
     public UserLogin() {
         super("UserLogin");
@@ -50,8 +51,17 @@ public class UserLogin extends Scene implements MouseListener, ActionListener, W
     @Override
     public void Initialize() {
         gameFrame.getContentPane().removeAll();
+
         gameFrame.getContentPane().add(this);
         this.LoadContent();
+        
+        X = new JButton("X");
+        //gameFrame.add(X);
+        
+        X.addActionListener(this);
+
+        gameFrame.getContentPane().add(X);
+        
     }
     
     @Override
@@ -62,7 +72,10 @@ public class UserLogin extends Scene implements MouseListener, ActionListener, W
     @Override
     public void Draw() {
         gameFrame.revalidate();
-        gameFrame.repaint();
+        
+        X.setBounds(650, 50, 90, 60);
+        gameFrame.repaint();  
+
     }
 
     @Override
@@ -97,7 +110,9 @@ public class UserLogin extends Scene implements MouseListener, ActionListener, W
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        if(e.getSource().equals(X)) {
+            SceneManager.SwitchScene("MainMenu");
+        }
     }
 
     @Override
