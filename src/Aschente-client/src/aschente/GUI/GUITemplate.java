@@ -37,9 +37,9 @@ import javax.swing.JFrame;
  *
  * @author Michael
  */
-public class UserLogin extends Scene implements MouseListener, ActionListener, WindowListener, KeyListener {
+public class GUITemplate extends Scene implements MouseListener, ActionListener, WindowListener, KeyListener {
     
-    public UserLogin() {
+    public GUITemplate() {
         super("UserLogin");
     }
     

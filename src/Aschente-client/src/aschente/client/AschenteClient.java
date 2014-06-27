@@ -18,13 +18,10 @@
 
 package aschente.client;
 
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Toolkit;
 import javax.swing.JFrame;
+import aschente.GUI.*;
 
 /**
  *
@@ -33,8 +30,8 @@ import javax.swing.JFrame;
 public class AschenteClient {
 
     static public boolean gameRunning = true;
-    static public JFrame gameFrame = new JFrame();
-    static public Graphics g = gameFrame.getGraphics();
+    static public JFrame gameFrame;
+    static public Graphics g;
     static public final int ResolutionWidth = 800;
     static public final int ResolutionHeight = 600;
     
@@ -43,6 +40,8 @@ public class AschenteClient {
     private AschenteClient() {
     //    GameData.loadMap();
     //    GameData.loadPlayer("player.xml");
+        gameFrame = new JFrame();
+        g = gameFrame.getGraphics();
         
         ImageLoader.loadAllImages();
         prepareFrame();
@@ -75,8 +74,11 @@ public class AschenteClient {
     {
         SceneManager.Initialize();
         
-      //  SceneManager.AddScene(new MainMenuGUI());
-      //  SceneManager.AddScene(new LevelMenuGUI());
+        SceneManager.AddScene(new UserLogin());
+        SceneManager.AddScene(new MainMenu());
+        SceneManager.AddScene(new GameMode());
+        
+        SceneManager.SwitchScene("UserLogin");
         
     }
     

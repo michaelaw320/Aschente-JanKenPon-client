@@ -44,7 +44,6 @@ public class SceneManager
     /**
      * Pindah Scene dari satu scene ke scene lain.
      * @param name Scene yang akan dijalankan
-     * @throws engine.Exception.SceneNotFoundException
      */
     static public void SwitchScene(String name) 
     {
@@ -88,7 +87,7 @@ public class SceneManager
     }
     
     /**
-     * Menghentikan game CubeMazer.
+     * Menghentikan game AschenteJanKenPon.
      */
     static public void ShutDown()
     {
