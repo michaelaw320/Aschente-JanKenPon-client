@@ -48,6 +48,7 @@ public class MainMenu extends Scene implements MouseListener, ActionListener, Wi
     @Override
     public void Initialize() {
         gameFrame.getContentPane().removeAll();
+        gameFrame.repaint();
         gameFrame.getContentPane().add(this);
         this.LoadContent();
     }
@@ -60,7 +61,7 @@ public class MainMenu extends Scene implements MouseListener, ActionListener, Wi
     @Override
     public void Draw() {
         gameFrame.revalidate();
-        gameFrame.repaint();
+        this.paint(gameFrame.getGraphics());
     }
 
     @Override

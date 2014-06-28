@@ -39,7 +39,7 @@ public class ImageLoader extends JPanel
     public static void loadAllImages()
     {
         // Image Background
-        allImages.add(loadImage("Images\\Scene_of_disboard.png"));
+        allImages.add(loadImage("Resources\\Images\\Scene_of_disboard.png"));
         
     }
     

@@ -20,9 +20,13 @@ package aschente.client;
 
 import aschente.GUI.*;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -39,6 +43,7 @@ public class AschenteClient {
     static public Graphics g;
     static public final int ResolutionWidth = 800;
     static public final int ResolutionHeight = 600;
+    static public Font NGNLFont;
     
     private final MidiPlayer BGM;
     
@@ -67,11 +72,15 @@ public class AschenteClient {
         gameFrame.pack();
         gameFrame.setSize(new Dimension(ResolutionWidth,ResolutionHeight));
         gameFrame.setLocationRelativeTo(null);
-        gameFrame.setResizable(true);
+        gameFrame.setResizable(false);
         gameFrame.setVisible(true);
         try {
-            gameFrame.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("Images\\Scene_of_disboard.png")))));
-        } catch (IOException ex) {}
+            gameFrame.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("Resources\\Images\\Scene_of_disboard.png")))));
+            NGNLFont = Font.createFont(Font.TRUETYPE_FONT,new File("Resources\\Font\\NGNL.ttf"));
+            NGNLFont = NGNLFont.deriveFont(36f);
+        } catch (IOException | FontFormatException ex) {}
+        gameFrame.setFont(NGNLFont);
+       
     }
     
         /**
@@ -94,7 +103,7 @@ public class AschenteClient {
         while(gameRunning) 
         { 
             long time = System.currentTimeMillis(); 
-            final int fps = 23;
+            final int fps = 60;
             
             SceneManager.Draw(); 
             SceneManager.Update(); 

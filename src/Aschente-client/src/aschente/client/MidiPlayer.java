@@ -41,7 +41,7 @@ public class MidiPlayer {
     public MidiPlayer() {
         try {
             // the midi file
-            File sequence = new File("Sound\\This_game.mid");
+            File sequence = new File("Resources\\Sound\\This_game.mid");
             // get the sequencer
             sequencer = MidiSystem.getSequencer(false);
             // get the synthesizer
