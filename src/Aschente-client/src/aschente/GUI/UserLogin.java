@@ -19,7 +19,6 @@ package aschente.GUI;
 
 import aschente.client.*;
 import static aschente.client.AschenteClient.NGNLFont;
-import static aschente.client.AschenteClient.ResolutionWidth;
 import static aschente.client.AschenteClient.gameFrame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -50,8 +49,6 @@ public class UserLogin extends Scene implements ActionListener, KeyListener {
     public void LoadContent() {
         gameFrame.getContentPane().add(ConnectButton);
 
-        ConnectButton.setBounds(275, 450, 250, 50);
-
         ConnectButton.addActionListener(this);
         gameFrame.addKeyListener(this);
 
@@ -73,6 +70,7 @@ public class UserLogin extends Scene implements ActionListener, KeyListener {
     @Override
     public void Draw() {
         gameFrame.revalidate();
+        ConnectButton.setBounds((gameFrame.getWidth()/2)-125,450, 250, 50);
         this.paint(gameFrame.getGraphics());
     }
 
@@ -83,13 +81,13 @@ public class UserLogin extends Scene implements ActionListener, KeyListener {
         NGNLFont = NGNLFont.deriveFont(64f);
         String Title = "PLEASE TYPE IN USERNAME:";
         int TitleLen = (int) g2D.getFontMetrics().getStringBounds(Title, g2D).getWidth();  
-        int start = ResolutionWidth/2 - TitleLen/2;  
+        int start = gameFrame.getWidth()/2 - TitleLen/2;  
         g2D.drawString(Title, start, 175);
         
         /* Username typing */
         NGNLFont = NGNLFont.deriveFont(36f);
         int UserLen = (int) g2D.getFontMetrics().getStringBounds(userName, g2D).getWidth();  
-        int startUser = ResolutionWidth/2 - UserLen/2;
+        int startUser = gameFrame.getWidth()/2 - UserLen/2;
         g2D.drawString(userName, startUser, 320);
         for(int j = 0; j < userName.length()+1;j++){
         g2D.drawString("_", startUser+j*18, 325);
@@ -101,7 +99,8 @@ public class UserLogin extends Scene implements ActionListener, KeyListener {
         if (e.getSource().equals(ConnectButton)) {
             //network send username here
             //to do checking before switch scene
-            SceneManager.SwitchScene("MainMenu");
+            GameData.PlayerName = userName;
+            SceneManager.SwitchScene("GameMode");
         }
     }
 
@@ -115,9 +114,13 @@ public class UserLogin extends Scene implements ActionListener, KeyListener {
     if (e.getKeyCode() == 8 && userName.length() != 0) {
             userName = userName.substring(0, userName.length() - 1);
             gameFrame.repaint();
+            this.paint(gameFrame.getGraphics());
         } else if ((e.getKeyCode() >= 48 && e.getKeyCode() <= 57) || (e.getKeyCode() >= 65 && e.getKeyCode() <= 90) || (e.getKeyCode() == 32)) {
             userName += e.getKeyChar();
             gameFrame.repaint();
+            this.paint(gameFrame.getGraphics());
+        } else if (e.getKeyCode() == 10) {
+            ConnectButton.doClick();
         }
     }
 

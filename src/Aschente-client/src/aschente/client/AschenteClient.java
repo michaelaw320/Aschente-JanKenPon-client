@@ -72,7 +72,7 @@ public class AschenteClient {
         gameFrame.pack();
         gameFrame.setSize(new Dimension(ResolutionWidth,ResolutionHeight));
         gameFrame.setLocationRelativeTo(null);
-        gameFrame.setResizable(false);
+        gameFrame.setResizable(true);
         gameFrame.setVisible(true);
         try {
             gameFrame.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("Resources\\Images\\Scene_of_disboard.png")))));
