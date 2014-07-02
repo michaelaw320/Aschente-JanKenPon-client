@@ -21,6 +21,7 @@ package aschente.GUI;
 import aschente.client.*;
 import static aschente.client.AschenteClient.NGNLFont;
 import static aschente.client.AschenteClient.gameFrame;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -48,7 +49,13 @@ public class GameMode extends Scene implements MouseListener, ActionListener, Wi
     private JButton rock;
     private JButton scissor;
     private JButton paper;
-    private boolean buttonsEnabled;
+    private JButton aschente;
+    private JButton nothing;
+    private int mode;
+    private boolean stopThread;
+    private Thread counter;
+    
+    /* Mode = 0 before aschente, Mode = 1 round start, Mode = 2 countdown started */
     
     public GameMode() {
         super("GameMode");
@@ -64,18 +71,24 @@ public class GameMode extends Scene implements MouseListener, ActionListener, Wi
             scissor.setFont(NGNLFont);
             paper.setFont(NGNLFont);
         }
-        
+        aschente = new JButton("ASCHENTE");
+        aschente.setFont(NGNLFont);
+        nothing = new JButton();
+        mode = 0;
+        stopThread = false;
     }
 
     public void LoadContent() {
         gameFrame.getContentPane().add(rock);
         gameFrame.getContentPane().add(scissor);
         gameFrame.getContentPane().add(paper);
+        gameFrame.getContentPane().add(aschente);
 
         rock.addActionListener(this);
         scissor.addActionListener(this);
         paper.addActionListener(this);
-       
+        aschente.addActionListener(this);
+        nothing.addActionListener(this);
     }
 
     @Override
@@ -84,19 +97,25 @@ public class GameMode extends Scene implements MouseListener, ActionListener, Wi
         gameFrame.repaint();
         gameFrame.getContentPane().add(this);
         this.LoadContent();
-        buttonsEnabled = true;
+        buttons("disabled");
     }
     
     @Override
     public void Update() {
-        if (buttonsEnabled) {
-            rock.setEnabled(true);
-            scissor.setEnabled(true);
-            paper.setEnabled(true);
-        } else {
-            rock.setEnabled(false);
-            scissor.setEnabled(false);
-            paper.setEnabled(false);
+        if(mode == 1) {
+            aschente.setVisible(false);
+            buttons("enabled");
+            GameData.Countdown = 10;
+            countdown();
+            mode = 2;
+            gameFrame.repaint();
+            paint(gameFrame.getGraphics());    
+        } else if (mode == 0) {
+            aschente.setVisible(true);
+        } else if (mode == 3) {
+            System.out.println("MODE 3");
+            stopThread = false;
+            mode = 1;
         }
     }
 
@@ -110,12 +129,84 @@ public class GameMode extends Scene implements MouseListener, ActionListener, Wi
         scissor.setBounds(start*2+130,gameFrame.getHeight()*2/3,130,130);
         paper.setBounds(start*3+130*2,gameFrame.getHeight()*2/3,130,130);
         
+        aschente.setBounds((gameFrame.getWidth()/2)-100, gameFrame.getHeight()/3, 200, 50);
+        
         this.paint(gameFrame.getGraphics());
     }
 
     @Override
     public void paint(Graphics g) {
         Graphics2D g2D = (Graphics2D) g;
+        int len;
+        int start;
+        String message,message2;
+        Font DisplayFont;
+
+        /* Draw Room Name centered above VS */
+        GameData.RoomName="TEST ROOM";
+        message = GameData.RoomName;
+        DisplayFont = NGNLFont.deriveFont(40f);
+        g2D.setFont(DisplayFont);
+        len = (int) g2D.getFontMetrics().getStringBounds(message, g2D).getWidth();  
+        start = gameFrame.getWidth()/2 - len/2;  
+        g2D.drawString(message, start, 70);
+        
+        /* Draw centered VS on screen */
+        message = "VS";
+        DisplayFont = NGNLFont.deriveFont(90f);
+        g2D.setFont(DisplayFont);
+        len = (int) g2D.getFontMetrics().getStringBounds(message, g2D).getWidth();  
+        start = gameFrame.getWidth()/2 - len/2;  
+        g2D.drawString(message, start, 125);
+        
+        /* Draw P1 name and score on the left */
+        message = GameData.PlayerName;
+        DisplayFont = NGNLFont.deriveFont(42f);
+        g2D.setFont(DisplayFont);
+        start = 25;  
+        g2D.drawString(message, start, 100);
+        
+        message2 = "SCORE: "+Integer.toString(GameData.Score);
+        DisplayFont = NGNLFont.deriveFont(32f);
+        g2D.setFont(DisplayFont);
+        g2D.drawString(message2, start, 125);
+        
+        /* Draw P2 name and score on the right */
+        GameData.Player2Name = "STEPH";
+        message = GameData.Player2Name;
+        DisplayFont = NGNLFont.deriveFont(42f);
+        g2D.setFont(DisplayFont);
+        len = (int) g2D.getFontMetrics().getStringBounds(message, g2D).getWidth();
+        start = gameFrame.getWidth() -25 - len;
+        g2D.drawString(message, start, 100);
+        
+        message2 = "SCORE: "+Integer.toString(GameData.ScoreP2);
+        DisplayFont = NGNLFont.deriveFont(32f);
+        g2D.setFont(DisplayFont);
+        len = (int) g2D.getFontMetrics().getStringBounds(message2, g2D).getWidth();
+        start = gameFrame.getWidth() -25 - len;
+        g2D.drawString(message2, start, 125);
+        
+        /* Draw Rounds centered below VS */
+        GameData.ToRound=5;
+        message = "ROUND: "+Integer.toString(GameData.Round)+" OF "+Integer.toString(GameData.ToRound);
+        DisplayFont = NGNLFont.deriveFont(50f);
+        g2D.setFont(DisplayFont);
+        len = (int) g2D.getFontMetrics().getStringBounds(message, g2D).getWidth();  
+        start = gameFrame.getWidth()/2 - len/2;  
+        g2D.drawString(message, start, 160);
+        
+        if(mode == 2) {
+            /* Draw Countdown centered */
+            if(GameData.Countdown > 0) {
+                message = Integer.toString(GameData.Countdown);
+                DisplayFont = NGNLFont.deriveFont(150f);
+                g2D.setFont(DisplayFont);
+                len = (int) g2D.getFontMetrics().getStringBounds(message, g2D).getWidth();  
+                start = gameFrame.getWidth()/2 - len/2;  
+                g2D.drawString(message, start, 300);
+            }
+        }
     }
     
     @Override
@@ -147,14 +238,28 @@ public class GameMode extends Scene implements MouseListener, ActionListener, Wi
     public void actionPerformed(ActionEvent e) {
         if(e.getSource().equals(rock)) {
             //network send 
-            buttonsEnabled = false;
+            buttons("disabled");
+            countdownStop();
+            GameData.Round++;
         } else if (e.getSource().equals(scissor)) {
             //network send scissor
-            buttonsEnabled = false;
+            buttons("disabled");
+            countdownStop();
+            GameData.Round++;
         } else if (e.getSource().equals(paper)) {
             //network send paper
-            buttonsEnabled = false;
-        }
+            buttons("disabled");
+            countdownStop();
+            GameData.Round++;
+        } else if (e.getSource().equals(nothing)) {
+            //network send nothing
+            buttons("disabled");
+            GameData.Round++;
+        } else if (e.getSource().equals(aschente)) {
+            mode = 1;
+            gameFrame.repaint();
+            paint(gameFrame.getGraphics());     
+        } 
     }
 
     @Override
@@ -190,6 +295,46 @@ public class GameMode extends Scene implements MouseListener, ActionListener, Wi
     @Override
     public void windowDeactivated(WindowEvent e) {
         
+    }
+    
+    private void buttons(String bool) {
+        if (bool.equals("enabled")) {
+            rock.setEnabled(true);
+            scissor.setEnabled(true);
+            paper.setEnabled(true);
+        } else {
+            rock.setEnabled(false);
+            scissor.setEnabled(false);
+            paper.setEnabled(false);
+        }
+    }
+    
+    private void countdown() {
+        counter = new Thread(new Runnable() {
+            public void run() {
+                while(GameData.Countdown > 0 && !stopThread) {
+                    try {
+                        Thread.sleep(1000);
+                        gameFrame.repaint();
+                        paint(gameFrame.getGraphics());
+                        GameData.Countdown--;
+                    } catch (InterruptedException ex) {}
+                }
+                stopThread = false;
+                if(GameData.Countdown == 0) {
+                    nothing.doClick();
+                    mode = 3;
+                }
+            }
+        });
+        if(stopThread == false) {
+            counter.start();
+        }
+    }
+    
+    private void countdownStop() {
+        stopThread = true;
+        mode = 3;
     }
     
 }

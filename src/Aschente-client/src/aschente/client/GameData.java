@@ -27,11 +27,14 @@ import java.util.ArrayList;
  */
 public class GameData {
     public static String PlayerName;
+    public static String Player2Name = "";
     public static int Score;
+    public static int ScoreP2;
     public static ArrayList<String> RoomList;
-    public static String RoomName;
-    public static int Round; 
-    public static Image background_image = ImageLoader.getImage("Background");
+    public static String RoomName = "";
+    public static int Round = 1; 
+    public static int ToRound = 5;
+    public static int Countdown;
     
     /**
      * Reset dataPlayer dan dataMap

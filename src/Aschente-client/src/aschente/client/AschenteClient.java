@@ -118,7 +118,6 @@ public class AschenteClient {
                 catch(Exception e){} 
             } 
         }   
-      //  GameData.savePlayer("player.xml");
         System.exit(0);
     }
     

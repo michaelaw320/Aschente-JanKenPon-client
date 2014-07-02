@@ -78,14 +78,12 @@ public class UserLogin extends Scene implements ActionListener, KeyListener {
     public void paint(Graphics g) {
         Graphics2D g2D = (Graphics2D) g;
         /*Title render */
-        NGNLFont = NGNLFont.deriveFont(64f);
         String Title = "PLEASE TYPE IN USERNAME:";
         int TitleLen = (int) g2D.getFontMetrics().getStringBounds(Title, g2D).getWidth();  
         int start = gameFrame.getWidth()/2 - TitleLen/2;  
         g2D.drawString(Title, start, 175);
         
         /* Username typing */
-        NGNLFont = NGNLFont.deriveFont(36f);
         int UserLen = (int) g2D.getFontMetrics().getStringBounds(userName, g2D).getWidth();  
         int startUser = gameFrame.getWidth()/2 - UserLen/2;
         g2D.drawString(userName, startUser, 320);
