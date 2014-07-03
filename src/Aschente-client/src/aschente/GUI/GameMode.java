@@ -28,6 +28,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -94,20 +96,29 @@ public class GameMode extends Scene implements ActionListener {
     
     @Override
     public void Update() {
-        if(mode == 1) {
+        if(mode == 0) {
+            aschente.setVisible(true);   
+        } else if (mode == 1) {
             aschente.setVisible(false);
             buttons("enabled");
             GameData.Countdown = 10;
             countdown();
             mode = 2;
             gameFrame.repaint();
-            paint(gameFrame.getGraphics());    
-        } else if (mode == 0) {
-            aschente.setVisible(true);
         } else if (mode == 3) {
+            /* Wait for network before returning to mode 0 or 1 */
             System.out.println("MODE 3");
             stopThread = false;
             mode = 1;
+            gameFrame.repaint();
+        } else if (mode == 4) {
+            
+        }
+        
+        if (GameData.Round == GameData.ToRound) {
+            mode = 4;
+            GameData.Countdown = 0;
+            Draw();
         }
     }
 
@@ -121,7 +132,7 @@ public class GameMode extends Scene implements ActionListener {
         scissor.setBounds(start*2+130,gameFrame.getHeight()*2/3,130,130);
         paper.setBounds(start*3+130*2,gameFrame.getHeight()*2/3,130,130);
         
-        aschente.setBounds((gameFrame.getWidth()/2)-100, gameFrame.getHeight()/3, 200, 50);
+        aschente.setBounds((gameFrame.getWidth()/2)-100, gameFrame.getHeight()/3 + 20, 200, 50);
         
         this.paint(gameFrame.getGraphics());
     }
@@ -223,6 +234,7 @@ public class GameMode extends Scene implements ActionListener {
             buttons("disabled");
             countdownStop();
             GameData.Round++;
+            System.out.println("NOTHING PRESSED");
         } else if (e.getSource().equals(aschente)) {
             mode = 1;
             gameFrame.repaint();
