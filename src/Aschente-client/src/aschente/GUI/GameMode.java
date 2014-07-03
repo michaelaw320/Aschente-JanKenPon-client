@@ -26,16 +26,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -44,7 +36,7 @@ import javax.swing.JButton;
  *
  * @author Michael
  */
-public class GameMode extends Scene implements MouseListener, ActionListener, WindowListener {
+public class GameMode extends Scene implements ActionListener {
 
     private JButton rock;
     private JButton scissor;
@@ -52,7 +44,7 @@ public class GameMode extends Scene implements MouseListener, ActionListener, Wi
     private JButton aschente;
     private JButton nothing;
     private int mode;
-    private boolean stopThread;
+    private volatile boolean stopThread;
     private Thread counter;
     
     /* Mode = 0 before aschente, Mode = 1 round start, Mode = 2 countdown started */
@@ -208,31 +200,6 @@ public class GameMode extends Scene implements MouseListener, ActionListener, Wi
             }
         }
     }
-    
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -254,47 +221,13 @@ public class GameMode extends Scene implements MouseListener, ActionListener, Wi
         } else if (e.getSource().equals(nothing)) {
             //network send nothing
             buttons("disabled");
+            countdownStop();
             GameData.Round++;
         } else if (e.getSource().equals(aschente)) {
             mode = 1;
             gameFrame.repaint();
             paint(gameFrame.getGraphics());     
         } 
-    }
-
-    @Override
-    public void windowOpened(WindowEvent e) {
-        
-    }
-
-    @Override
-    public void windowClosing(WindowEvent e) {
-        
-    }
-
-    @Override
-    public void windowClosed(WindowEvent e) {
-        
-    }
-
-    @Override
-    public void windowIconified(WindowEvent e) {
-        
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent e) {
-        
-    }
-
-    @Override
-    public void windowActivated(WindowEvent e) {
-        
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent e) {
-        
     }
     
     private void buttons(String bool) {
@@ -320,10 +253,8 @@ public class GameMode extends Scene implements MouseListener, ActionListener, Wi
                         GameData.Countdown--;
                     } catch (InterruptedException ex) {}
                 }
-                stopThread = false;
                 if(GameData.Countdown == 0) {
                     nothing.doClick();
-                    mode = 3;
                 }
             }
         });
@@ -334,6 +265,7 @@ public class GameMode extends Scene implements MouseListener, ActionListener, Wi
     
     private void countdownStop() {
         stopThread = true;
+        counter.interrupt();
         mode = 3;
     }
     

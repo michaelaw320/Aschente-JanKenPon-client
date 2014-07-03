@@ -34,7 +34,7 @@ public class GameData {
     public static String RoomName = "";
     public static int Round = 1; 
     public static int ToRound = 5;
-    public static int Countdown;
+    public static volatile int Countdown;
     
     /**
      * Reset dataPlayer dan dataMap
