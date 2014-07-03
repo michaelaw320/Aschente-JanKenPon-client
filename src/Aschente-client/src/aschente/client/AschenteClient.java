@@ -75,7 +75,7 @@ public class AschenteClient {
         gameFrame.setResizable(true);
         gameFrame.setVisible(true);
         try {
-            gameFrame.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("Resources\\Images\\Scene_of_disboard.png")))));
+            gameFrame.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("Resources\\Images\\background.png")))));
             NGNLFont = Font.createFont(Font.TRUETYPE_FONT,new File("Resources\\Font\\NGNL.ttf"));
             NGNLFont = NGNLFont.deriveFont(36f);
         } catch (IOException | FontFormatException ex) {}
@@ -93,6 +93,7 @@ public class AschenteClient {
         SceneManager.AddScene(new UserLogin());
         SceneManager.AddScene(new MainMenu());
         SceneManager.AddScene(new GameMode());
+        SceneManager.AddScene(new OathScreen());
         
         SceneManager.SwitchScene("UserLogin");
         
@@ -115,7 +116,7 @@ public class AschenteClient {
                 { 
                     Thread.sleep(time); 
                 } 
-                catch(Exception e){} 
+                catch(InterruptedException e){} 
             } 
         }   
         System.exit(0);

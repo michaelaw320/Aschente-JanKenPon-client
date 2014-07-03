@@ -89,7 +89,6 @@ public class GameMode extends Scene implements ActionListener {
     public void Initialize() {
         gameFrame.getContentPane().removeAll();
         gameFrame.repaint();
-        gameFrame.getContentPane().add(this);
         this.LoadContent();
         buttons("disabled");
     }
@@ -146,7 +145,6 @@ public class GameMode extends Scene implements ActionListener {
         Font DisplayFont;
 
         /* Draw Room Name centered above VS */
-        GameData.RoomName="TEST ROOM";
         message = GameData.RoomName;
         DisplayFont = NGNLFont.deriveFont(40f);
         g2D.setFont(DisplayFont);
@@ -175,7 +173,6 @@ public class GameMode extends Scene implements ActionListener {
         g2D.drawString(message2, start, 125);
         
         /* Draw P2 name and score on the right */
-        GameData.Player2Name = "STEPH";
         message = GameData.Player2Name;
         DisplayFont = NGNLFont.deriveFont(42f);
         g2D.setFont(DisplayFont);

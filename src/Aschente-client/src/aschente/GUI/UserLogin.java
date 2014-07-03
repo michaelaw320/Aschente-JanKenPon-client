@@ -36,29 +36,25 @@ public class UserLogin extends Scene implements ActionListener, KeyListener {
 
     private JButton ConnectButton;
     private String userName;
-    private int mode;
 
     public UserLogin() {
         super("UserLogin");
         ConnectButton = new JButton("CONNECT");
         ConnectButton.setFont(NGNLFont);
-        userName = "";
-        mode = 0;
     }
 
     public void LoadContent() {
         gameFrame.getContentPane().add(ConnectButton);
-
-        ConnectButton.addActionListener(this);
         gameFrame.addKeyListener(this);
-
+        ConnectButton.addActionListener(this);
+        gameFrame.requestFocus();
+        userName = "";
     }
 
     @Override
     public void Initialize() {
         gameFrame.getContentPane().removeAll();
         gameFrame.repaint();
-        gameFrame.getContentPane().add(this);
         this.LoadContent();
     }
 
@@ -98,7 +94,7 @@ public class UserLogin extends Scene implements ActionListener, KeyListener {
             //network send username here
             //to do checking before switch scene
             GameData.PlayerName = userName;
-            SceneManager.SwitchScene("GameMode");
+            SceneManager.SwitchScene("OathScreen");
         }
     }
 

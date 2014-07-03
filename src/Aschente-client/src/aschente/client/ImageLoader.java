@@ -38,16 +38,26 @@ public class ImageLoader extends JPanel
     
     public static void loadAllImages()
     {
-        // Image Background
-        allImages.add(loadImage("Resources\\Images\\Scene_of_disboard.png"));
-        
+        // Images for Graphics
+        allImages.add(loadImage("Resources\\Images\\image_chara_siro.png"));
+        allImages.add(loadImage("Resources\\Images\\image_chara_sora.png"));
+        allImages.add(loadImage("Resources\\Images\\image_chara_zibu.png"));
+        allImages.add(loadImage("Resources\\Images\\image_chara_steph.png"));
+        allImages.add(loadImage("Resources\\Images\\image_chara_steph_lose.png"));
     }
     
     public static Image getImage(String imgName)
     {
-        if ("background_image".equalsIgnoreCase(imgName))
-        {
+        if ("shiro".equalsIgnoreCase(imgName)) {
             return allImages.get(0);
+        } else if ("sora".equalsIgnoreCase(imgName)) {
+            return allImages.get(1);
+        } else if ("jibril".equalsIgnoreCase(imgName)) {
+            return allImages.get(2);
+        } else if ("steph".equalsIgnoreCase(imgName)) {
+            return allImages.get(3);
+        } else if ("steph_lose".equalsIgnoreCase(imgName)) {
+            return allImages.get(4);
         }
         return null;
     }
