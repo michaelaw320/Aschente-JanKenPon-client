@@ -91,10 +91,12 @@ public class AschenteClient {
         SceneManager.Initialize();
         
         SceneManager.AddScene(new UserLogin());
-        SceneManager.AddScene(new MainMenu());
-        SceneManager.AddScene(new GameMode());
         SceneManager.AddScene(new OathScreen());
-        
+        SceneManager.AddScene(new MainMenu());
+        SceneManager.AddScene(new CreateRoom());
+        SceneManager.AddScene(new JoinRoom());
+        SceneManager.AddScene(new GameMode());
+
         SceneManager.SwitchScene("UserLogin");
         
     }

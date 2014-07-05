@@ -34,7 +34,7 @@ import javax.swing.JButton;
  */
 public class UserLogin extends Scene implements ActionListener, KeyListener {
 
-    private JButton ConnectButton;
+    private final JButton ConnectButton;
     private String userName;
 
     public UserLogin() {

@@ -38,15 +38,15 @@ import javax.swing.JButton;
  */
 public class OathScreen extends Scene implements ActionListener {
 
-    private JButton ContinueButton;
-    private ArrayList<String> Oaths;
+    private final JButton ContinueButton;
+    private final ArrayList<String> Oaths;
     private int mode;
     /* Mode = 0 : waiting connection ; Mode = 1 : login failed return to prev screen ; Mode 2 : login success */
 
-    private Image sora;
-    private Image shiro;
-    private Image jibril;
-    private Image steph;
+    private final Image sora;
+    private final Image shiro;
+    private final Image jibril;
+    private final Image steph;
     private Image disp1;
     private Image disp2;
     private int random1;
@@ -114,7 +114,7 @@ public class OathScreen extends Scene implements ActionListener {
             default:
                 System.err.println("randomerr");     
         }
-        mode = 0;
+        mode = 2;
         ContinueButton.setText("CONTINUE");
     }
 
