@@ -55,8 +55,7 @@ public class OathScreen extends Scene implements ActionListener {
     public OathScreen() {
         super("OathScreen");
         ContinueButton = new JButton();
-        ContinueButton.setFont(NGNLFont);
-        
+        ContinueButton.setFont(NGNLFont);       
         Oaths = new ArrayList<>();
         Scanner Sc;
         try {
@@ -72,10 +71,14 @@ public class OathScreen extends Scene implements ActionListener {
         jibril = ImageLoader.getImage("jibril");
         steph = ImageLoader.getImage("steph");
         
+        ConstructButtonListener();
+    }
+    
+    private void ConstructButtonListener() {
+        ContinueButton.addActionListener(this); 
     }
 
     public void LoadContent() {
-        ContinueButton.addActionListener(this);
         gameFrame.getContentPane().add(ContinueButton);
 
         random1 = (int) (Math.random()*4 + 1);

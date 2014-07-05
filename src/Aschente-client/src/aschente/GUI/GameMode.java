@@ -68,6 +68,15 @@ public class GameMode extends Scene implements ActionListener {
         nothing = new JButton();
         mode = 0;
         stopThread = false;
+        ConstructButtonListener();
+    }
+    
+    private void ConstructButtonListener() {
+        rock.addActionListener(this);
+        scissor.addActionListener(this);
+        paper.addActionListener(this);
+        aschente.addActionListener(this);
+        nothing.addActionListener(this);
     }
 
     public void LoadContent() {
@@ -75,12 +84,6 @@ public class GameMode extends Scene implements ActionListener {
         gameFrame.getContentPane().add(scissor);
         gameFrame.getContentPane().add(paper);
         gameFrame.getContentPane().add(aschente);
-
-        rock.addActionListener(this);
-        scissor.addActionListener(this);
-        paper.addActionListener(this);
-        aschente.addActionListener(this);
-        nothing.addActionListener(this);
     }
 
     @Override

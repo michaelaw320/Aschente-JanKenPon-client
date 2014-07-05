@@ -41,12 +41,17 @@ public class UserLogin extends Scene implements ActionListener, KeyListener {
         super("UserLogin");
         ConnectButton = new JButton("CONNECT");
         ConnectButton.setFont(NGNLFont);
+
+        ConstructButtonListener();
     }
 
+    private void ConstructButtonListener() {
+        ConnectButton.addActionListener(this);       
+    }
+    
     public void LoadContent() {
         gameFrame.getContentPane().add(ConnectButton);
-        gameFrame.addKeyListener(this);
-        ConnectButton.addActionListener(this);
+        gameFrame.addKeyListener(this); 
         gameFrame.requestFocus();
         userName = "";
     }
@@ -94,6 +99,7 @@ public class UserLogin extends Scene implements ActionListener, KeyListener {
             //network send username here
             //to do checking before switch scene
             GameData.PlayerName = userName;
+            gameFrame.removeKeyListener(this);
             SceneManager.SwitchScene("OathScreen");
         }
     }
@@ -113,14 +119,14 @@ public class UserLogin extends Scene implements ActionListener, KeyListener {
             userName += e.getKeyChar();
             gameFrame.repaint();
             this.paint(gameFrame.getGraphics());
-        } else if (e.getKeyCode() == 10) {
-            ConnectButton.doClick();
-        }
+        } 
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        
+        if (e.getKeyCode() == 10) {
+            ConnectButton.doClick();
+        }
     }
 
 }

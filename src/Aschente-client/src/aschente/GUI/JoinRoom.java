@@ -35,8 +35,13 @@ public class JoinRoom extends Scene implements ActionListener, KeyListener {
 
     public JoinRoom() {
         super("JoinRoom");
+        ConstructButtonListener();
     }
 
+    private void ConstructButtonListener() {
+    
+    }
+    
     public void LoadContent() {
 
     }

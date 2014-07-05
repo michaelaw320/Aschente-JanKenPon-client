@@ -78,7 +78,9 @@ public class AschenteClient {
             gameFrame.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("Resources\\Images\\background.png")))));
             NGNLFont = Font.createFont(Font.TRUETYPE_FONT,new File("Resources\\Font\\NGNL.ttf"));
             NGNLFont = NGNLFont.deriveFont(36f);
-        } catch (IOException | FontFormatException ex) {}
+        } catch (IOException | FontFormatException ex) {
+            NGNLFont = new Font("Arial",36,36);
+        }
         gameFrame.setFont(NGNLFont);
        
     }

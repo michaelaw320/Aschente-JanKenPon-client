@@ -37,7 +37,7 @@ public class GameData {
     public static volatile int Countdown;
     
     /**
-     * Reset dataPlayer dan dataMap
+     * Reset room list
      */
     public static void reset()
     {
