@@ -25,8 +25,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -37,10 +35,10 @@ import javax.swing.JScrollPane;
  */
 public class JoinRoom extends Scene implements ActionListener {
     
-    private JButton refreshButton;
-    private JButton joinButton;
-    private JList room;
-    private JScrollPane scrollPane;
+    private final JButton refreshButton;
+    private final JButton joinButton;
+    private final JList room;
+    private final JScrollPane scrollPane;
 
     public JoinRoom() {
         super("JoinRoom");
