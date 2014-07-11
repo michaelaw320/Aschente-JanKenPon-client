@@ -19,6 +19,7 @@
 package aschente.GUI;
 
 import aschente.client.*;
+import static aschente.client.AschenteClient.NGNLFont;
 import static aschente.client.AschenteClient.gameFrame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -26,24 +27,44 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
 
 /**
  *
  * @author Michael
  */
-public class JoinRoom extends Scene implements ActionListener, KeyListener {
+public class JoinRoom extends Scene implements ActionListener {
+    
+    private JButton refreshButton;
+    private JButton joinButton;
+    private JList room;
+    private JScrollPane scrollPane;
 
     public JoinRoom() {
         super("JoinRoom");
+        refreshButton = new JButton("REFRESH");
+        joinButton = new JButton("JOIN");
+        room = new JList();
+        scrollPane = new JScrollPane();
+        refreshButton.setFont(NGNLFont);
+        joinButton.setFont(NGNLFont);
+        
         ConstructButtonListener();
     }
 
     private void ConstructButtonListener() {
-    
+        refreshButton.addActionListener(this);
+        joinButton.addActionListener(this);
+        scrollPane.setViewportView(room);
     }
     
     public void LoadContent() {
-
+        gameFrame.getContentPane().add(refreshButton);
+        gameFrame.getContentPane().add(joinButton);
+        gameFrame.getContentPane().add(scrollPane);
+        room.setListData(GameData.RoomList.toArray());
     }
 
     @Override
@@ -61,6 +82,9 @@ public class JoinRoom extends Scene implements ActionListener, KeyListener {
     @Override
     public void Draw() {
         gameFrame.revalidate();
+        refreshButton.setBounds(gameFrame.getWidth()*2/3,100,200,50);
+        joinButton.setBounds(gameFrame.getWidth()*2/3,175,200,50);
+        scrollPane.setBounds(gameFrame.getWidth()/16,gameFrame.getHeight()/12,(gameFrame.getWidth()/2),gameFrame.getHeight()*5/6);
         this.paint(gameFrame.getGraphics());
     }
 
@@ -71,22 +95,12 @@ public class JoinRoom extends Scene implements ActionListener, KeyListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
-
-    }
-    
-    @Override
-    public void keyTyped(KeyEvent e) {
-        
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        
+        if(e.getSource().equals(refreshButton)) {
+            GameData.clearRoomList();
+            room.setListData(GameData.RoomList.toArray());
+        } else if (e.getSource().equals(joinButton)) {
+            System.out.println(room.getSelectedValue());
+        }
     }
     
 }

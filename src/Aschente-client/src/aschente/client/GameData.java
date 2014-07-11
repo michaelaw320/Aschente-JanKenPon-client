@@ -30,7 +30,7 @@ public class GameData {
     public static String Player2Name = "";
     public static int Score;
     public static int ScoreP2;
-    public static ArrayList<String> RoomList;
+    public static ArrayList<String> RoomList = new ArrayList<>();
     public static String RoomName = "";
     public static int Round = 1; 
     public static int ToRound = 5;
@@ -39,7 +39,7 @@ public class GameData {
     /**
      * Reset room list
      */
-    public static void reset()
+    public static void clearRoomList()
     {
         RoomList.clear();
     }
