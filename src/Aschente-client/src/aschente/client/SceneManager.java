@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class SceneManager 
 {
     // Attributes
-    static private ArrayList<Scene> Scenes = new ArrayList<>();
+    private static final ArrayList<Scene> Scenes = new ArrayList<>();
     static private boolean Started = false;
     static private Scene activeScene = null;
     

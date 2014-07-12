@@ -46,8 +46,6 @@ public class AschenteClient {
     private final MidiPlayer BGM;
     
     private AschenteClient() {
-    //    GameData.loadMap();
-    //    GameData.loadPlayer("player.xml");
         gameFrame = new JFrame();
         g = gameFrame.getGraphics();
         
@@ -57,7 +55,6 @@ public class AschenteClient {
         PrepareScenes();
         BGM = new MidiPlayer();
         BGM.play();
-        gameLoop();
     }
     
     /**
@@ -73,7 +70,7 @@ public class AschenteClient {
         gameFrame.setResizable(true);
         gameFrame.setVisible(true);
         try {
-            gameFrame.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("Resources\\Images\\background.png")))));
+            gameFrame.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("Resources\\Images\\background.jpg")))));
             NGNLFont = Font.createFont(Font.TRUETYPE_FONT,new File("Resources\\Font\\NGNL.ttf"));
             NGNLFont = NGNLFont.deriveFont(36f);
         } catch (IOException | FontFormatException ex) {
@@ -130,6 +127,7 @@ public class AschenteClient {
     public static void main(String[] args) {
         // TODO code application logic here
         AschenteClient Aschente = new AschenteClient();
+        gameLoop();
     }
     
 }

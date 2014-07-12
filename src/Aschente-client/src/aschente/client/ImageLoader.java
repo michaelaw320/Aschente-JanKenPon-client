@@ -29,7 +29,7 @@ import javax.swing.JPanel;
  */
 public class ImageLoader extends JPanel
 {
-    private static ArrayList<Image> allImages = new ArrayList<>();  
+    private static final ArrayList<Image> allImages = new ArrayList<>();  
     
     private static Image loadImage(String path)
     {

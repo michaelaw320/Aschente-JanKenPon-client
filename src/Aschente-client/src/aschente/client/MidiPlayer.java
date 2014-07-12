@@ -19,8 +19,6 @@ package aschente.client;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiSystem;
@@ -41,7 +39,13 @@ public class MidiPlayer {
     public MidiPlayer() {
         try {
             // the midi file
-            File sequence = new File("Resources\\Sound\\This_game.mid");
+            int random = (int) (Math.random()*2 + 1);
+            File sequence;
+            if(random == 1) {
+                sequence = new File("Resources\\Sound\\This_game.mid");
+            } else {
+                sequence = new File("Resources\\Sound\\This game.mid");
+            }
             // get the sequencer
             sequencer = MidiSystem.getSequencer(false);
             // get the synthesizer
@@ -61,7 +65,11 @@ public class MidiPlayer {
             // start the playback
             sequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
             // set the volume the normal way
-            setVolume(127);
+            int volume = 127;
+            MidiChannel[] channels = synthesizer.getChannels();
+            for (MidiChannel channel : channels) {
+                channel.controlChange(7, volume);
+            }
         } catch (MidiUnavailableException | InvalidMidiDataException | IOException ex) {
             System.err.println(ex);
         }
@@ -69,6 +77,7 @@ public class MidiPlayer {
 
     public void play() {
         new Thread(new Runnable() {
+            @Override
             public void run() {
                 if (sequencer != null) {
                     sequencer.start();
@@ -76,12 +85,4 @@ public class MidiPlayer {
             }
         }).start();
     }
-
-    public void setVolume(int volume) {
-        MidiChannel[] channels = synthesizer.getChannels();
-        for (MidiChannel channel : channels) {
-            channel.controlChange(7, volume);
-        }
-    }
-
 }
