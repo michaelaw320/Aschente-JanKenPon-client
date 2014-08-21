@@ -18,10 +18,35 @@
 
 package aschente.client;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Michael
  */
 public class Network {
-    
+    public static Socket connection = null;
+    public static ObjectOutputStream out;
+    public static ObjectInputStream in;
+    public static void Connect(String host, int port) throws IOException {
+            connection = new Socket(host,port);
+            connection.setSoTimeout(15000);
+            out = new ObjectOutputStream(connection.getOutputStream());
+            in = new ObjectInputStream(connection.getInputStream());
+    }
+    public static void Send(Object toSend) throws IOException {
+        out.writeObject(toSend);
+        out.flush();
+        out.reset();
+    }
+    public static Object Receive() throws IOException, ClassNotFoundException {
+        return in.readObject();
+    }
 }

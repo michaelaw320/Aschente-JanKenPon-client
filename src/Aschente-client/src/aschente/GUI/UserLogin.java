@@ -26,6 +26,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 
 /**
@@ -96,6 +99,11 @@ public class UserLogin extends Scene implements ActionListener, KeyListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(ConnectButton)) {
+            try {
+                Network.Send(userName);
+            } catch (IOException ex) {
+                System.err.println("CAN'T SEND USERNAME");
+            }
             //network send username here
             //to do checking before switch scene
             GameData.PlayerName = userName;
