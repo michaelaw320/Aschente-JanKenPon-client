@@ -95,8 +95,10 @@ public class JoinRoom extends Scene implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource().equals(refreshButton)) {
             GameData.clearRoomList();
+            Network.Send("REFRESHROOMLIST");
             room.setListData(GameData.RoomList.toArray());
         } else if (e.getSource().equals(joinButton)) {
+            Network.Send("JOINROOM");
             System.out.println(room.getSelectedValue());
         }
     }

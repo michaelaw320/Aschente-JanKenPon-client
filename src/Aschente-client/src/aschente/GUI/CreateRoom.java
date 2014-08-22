@@ -27,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -96,11 +97,18 @@ public class CreateRoom extends Scene implements ActionListener, KeyListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(CreateButton)) {
-            //network send username here
-            //to do checking before switch scene
-            GameData.RoomName = roomName;
-            gameFrame.removeKeyListener(this);
-            SceneManager.SwitchScene("GameMode");
+            if(roomName.equals("")) {
+                JOptionPane.showMessageDialog(gameFrame, "Room Name cannot be empty");
+                gameFrame.requestFocus();
+            } else {
+                GameData.RoomName = roomName;
+                Network.Send("CREATEROOM");
+                System.out.println(Network.Receive());
+                Network.Send(roomName);
+                //to do duplicate room handling
+                gameFrame.removeKeyListener(this);
+                SceneManager.SwitchScene("GameMode");
+            }
         }
     }
 
