@@ -18,12 +18,13 @@
 
 package aschente.client;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,6 +36,24 @@ public class Network {
     public static Socket connection = null;
     public static ObjectOutputStream out;
     public static ObjectInputStream in;
+    public static String serverAddress;
+    public static int serverPort;
+    public static void Connect() throws IOException {
+        /* Read server configuration */
+        try {
+            File server = new File ("Config\\server.txt");
+            Scanner sc = new Scanner(server);
+            String read = sc.nextLine();
+            String[] split = read.split(":");
+            serverAddress = split[0];
+            serverPort = Integer.parseInt(split[1]);
+        } catch (FileNotFoundException ex) {
+            System.err.println("Can't find server.txt, using default value of localhost:45373");
+            serverAddress = "localhost";
+            serverPort = 45373;
+        }
+        Connect(serverAddress, serverPort);
+    }
     public static void Connect(String host, int port) throws IOException {
             connection = new Socket(host,port);
             connection.setSoTimeout(15000);
@@ -46,7 +65,11 @@ public class Network {
         out.flush();
         out.reset();
     }
-    public static Object Receive() throws IOException, ClassNotFoundException {
-        return in.readObject();
+    public static Object Receive() throws IOException {
+        try {
+            return in.readObject();
+        } catch (ClassNotFoundException ex) {
+            return null;
+        }
     }
 }

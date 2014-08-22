@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -99,16 +100,23 @@ public class UserLogin extends Scene implements ActionListener, KeyListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(ConnectButton)) {
-            try {
-                Network.Send(userName);
-            } catch (IOException ex) {
-                System.err.println("CAN'T SEND USERNAME");
+            
+            if(userName.equals("")) {
+                JOptionPane.showMessageDialog(gameFrame, "Username cannot be empty");
+                gameFrame.requestFocus();
+            } else {
+                GameData.PlayerName = userName;
+                try {
+                    Network.Send("USERNAMEINPUT");
+                    System.out.println(Network.Receive());
+                    Network.Send(userName);
+                    //to do duplicate username handling
+                } catch (IOException ex) {
+                    System.err.println("CAN'T SEND USERNAME");
+                }
+                gameFrame.removeKeyListener(this);
+                SceneManager.SwitchScene("OathScreen");
             }
-            //network send username here
-            //to do checking before switch scene
-            GameData.PlayerName = userName;
-            gameFrame.removeKeyListener(this);
-            SceneManager.SwitchScene("OathScreen");
         }
     }
 

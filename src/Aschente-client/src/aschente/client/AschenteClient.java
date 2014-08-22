@@ -24,15 +24,12 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -46,8 +43,6 @@ public class AschenteClient {
     static public final int ResolutionWidth = 800;
     static public final int ResolutionHeight = 600;
     static public Font NGNLFont;
-    static public String serverAddress;
-    static public int serverPort;
     
     private final MidiPlayer BGM;
     
@@ -63,24 +58,10 @@ public class AschenteClient {
         BGM.play();
         
         try {
-            File server = new File ("Config\\server.txt");
-            Scanner sc = new Scanner(server);
-            String read = sc.nextLine();
-            String[] split = read.split(":");
-            serverAddress = split[0];
-            serverPort = Integer.parseInt(split[1]);
-            System.out.println(serverAddress+serverPort);
-        } catch (FileNotFoundException ex) {
-            System.err.println("Can't find server.txt, using default value of localhost:6969");
-            serverAddress = "localhost";
-            serverPort = 6969;
-        }
-        
-        //insert block to read from server.txt here
-        try {
-            Network.Connect("127.0.0.1", 6969);
-        } catch (IOException ex) {
+            Network.Connect();
+        }catch (IOException ex) {
             System.err.println("ERROR CONNECTING TO SERVER");
+            JOptionPane.showMessageDialog(gameFrame, "CANNOT CONNECT TO SERVER");
             System.exit(1);
         }
 
