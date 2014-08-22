@@ -18,6 +18,7 @@
 
 package aschente.client;
 
+import static aschente.client.AschenteClient.gameFrame;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -27,6 +28,7 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -60,15 +62,24 @@ public class Network {
             out = new ObjectOutputStream(connection.getOutputStream());
             in = new ObjectInputStream(connection.getInputStream());
     }
-    public static void Send(Object toSend) throws IOException {
-        out.writeObject(toSend);
-        out.flush();
-        out.reset();
+    public static void Send(Object toSend) {
+        try {
+            out.writeObject(toSend);
+            out.flush();
+            out.reset();
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(gameFrame, "CONNECTION ERROR, TERMINATING CLIENT");
+            System.exit(1);
+        }
     }
-    public static Object Receive() throws IOException {
+    public static Object Receive() {
         try {
             return in.readObject();
         } catch (ClassNotFoundException ex) {
+            return null;
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(gameFrame, "CONNECTION ERROR, TERMINATING CLIENT");
+            System.exit(1);
             return null;
         }
     }

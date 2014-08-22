@@ -28,9 +28,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -117,7 +121,7 @@ public class OathScreen extends Scene implements ActionListener {
             default:
                 System.err.println("randomerr");     
         }
-        mode = 2;
+        mode = 0;
         ContinueButton.setText("CONTINUE");
     }
 
@@ -133,6 +137,12 @@ public class OathScreen extends Scene implements ActionListener {
         if (mode == 0) {
         /* Check for network message on successful connection or not */
             ContinueButton.setEnabled(false);
+            String conf = (String) Network.Receive();
+            if(conf.equals("OK")) {
+                mode = 2;
+            } else {
+                mode = 1;
+            }
         }
         else if (mode == 1) {
             ContinueButton.setEnabled(true);

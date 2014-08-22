@@ -106,14 +106,10 @@ public class UserLogin extends Scene implements ActionListener, KeyListener {
                 gameFrame.requestFocus();
             } else {
                 GameData.PlayerName = userName;
-                try {
-                    Network.Send("USERNAMEINPUT");
-                    System.out.println(Network.Receive());
-                    Network.Send(userName);
-                    //to do duplicate username handling
-                } catch (IOException ex) {
-                    System.err.println("CAN'T SEND USERNAME");
-                }
+                Network.Send("USERNAMEINPUT");
+                System.out.println(Network.Receive());
+                Network.Send(userName);
+                //to do duplicate username handling
                 gameFrame.removeKeyListener(this);
                 SceneManager.SwitchScene("OathScreen");
             }
