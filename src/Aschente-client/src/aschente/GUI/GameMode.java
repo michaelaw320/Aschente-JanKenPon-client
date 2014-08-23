@@ -28,7 +28,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -103,16 +102,12 @@ public class GameMode extends Scene implements ActionListener {
             aschente.setVisible(true);
             aschente.setEnabled(false);
             while(GameData.wait) {
-                Network.Send("READY?");
-                System.out.println("READY?");
-                if(Network.Receive().equals("NOTYET")) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(GameMode.class.getName()).log(Level.SEVERE, null, ex);
+                try {
+                    if(Network.ReceiveWait().equals("GAMESTART")) {
+                        GameData.wait = false;
                     }
-                } else {
-                    GameData.wait = false;
+                } catch (IOException ex) {
+                    System.out.println("STILL WAITING...");
                 }
             }
             UpdateRoomData();
@@ -213,7 +208,6 @@ public class GameMode extends Scene implements ActionListener {
         g2D.drawString(message2, start, 125);
         
         /* Draw Rounds centered below VS */
-        GameData.ToRound=5;
         message = "ROUND: "+Integer.toString(GameData.Round)+" OF "+Integer.toString(GameData.ToRound);
         DisplayFont = NGNLFont.deriveFont(50f);
         g2D.setFont(DisplayFont);
@@ -258,9 +252,21 @@ public class GameMode extends Scene implements ActionListener {
             GameData.Round++;
             System.out.println("NOTHING PRESSED");
         } else if (e.getSource().equals(aschente)) {
-            mode = 1;
+            Network.Send("ASCHENTE!");
+            GameData.wait = true;
+            aschente.setEnabled(false);
+            while (GameData.wait) {
+                try {
+                    if(Network.ReceiveWait().equals("ASCHENTE!")) {
+                        GameData.wait = false;
+                    }
+                } catch (IOException ex) {
+
+                }
+            }
             gameFrame.repaint();
-            paint(gameFrame.getGraphics());     
+            paint(gameFrame.getGraphics());
+            mode = 1;
         } 
     }
     
@@ -308,6 +314,8 @@ public class GameMode extends Scene implements ActionListener {
         GameData.Player2Name = (String) Network.Receive();
         GameData.ScoreP2 = (int) Network.Receive();
         GameData.ToRound = (int) Network.Receive(); 
+        gameFrame.repaint();
+        paint(gameFrame.getGraphics());
     }
-    
+
 }

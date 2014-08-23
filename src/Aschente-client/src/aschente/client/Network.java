@@ -81,4 +81,11 @@ public class Network {
             return null;
         }
     }
+    public static Object ReceiveWait() throws IOException {
+        try {
+            return in.readObject();
+        } catch (ClassNotFoundException ex) {
+            return null;
+        }
+    }
 }
