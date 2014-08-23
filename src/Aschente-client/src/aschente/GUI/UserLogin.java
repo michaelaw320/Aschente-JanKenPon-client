@@ -106,6 +106,7 @@ public class UserLogin extends Scene implements ActionListener, KeyListener {
                 Network.Send("USERNAMEINPUT");
                 System.out.println(Network.Receive());
                 Network.Send(userName);
+                GameData.Score = (int) Network.Receive();
                 //to do duplicate username handling
                 gameFrame.removeKeyListener(this);
                 SceneManager.SwitchScene("OathScreen");

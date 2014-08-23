@@ -32,7 +32,7 @@ public class GameData {
     public static ArrayList<String> RoomList = new ArrayList<>();
     public static String RoomName = "";
     public static int Round = 1; 
-    public static int ToRound = 5;
+    public static int ToRound;
     public static volatile int Countdown;
     
     /**

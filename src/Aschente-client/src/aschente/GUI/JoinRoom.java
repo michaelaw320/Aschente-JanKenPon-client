@@ -25,6 +25,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -62,7 +63,7 @@ public class JoinRoom extends Scene implements ActionListener {
         gameFrame.getContentPane().add(refreshButton);
         gameFrame.getContentPane().add(joinButton);
         gameFrame.getContentPane().add(scrollPane);
-        room.setListData(GameData.RoomList.toArray());
+        RefreshRoomList();
     }
 
     @Override
@@ -94,13 +95,22 @@ public class JoinRoom extends Scene implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource().equals(refreshButton)) {
-            GameData.clearRoomList();
-            Network.Send("REFRESHROOMLIST");
-            room.setListData(GameData.RoomList.toArray());
+            RefreshRoomList();
         } else if (e.getSource().equals(joinButton)) {
             Network.Send("JOINROOM");
+            System.out.println(Network.Receive());
+            Network.Send(room.getSelectedValue());
             System.out.println(room.getSelectedValue());
+            GameData.RoomName = room.getSelectedValue().toString();
+            SceneManager.SwitchScene("GameMode");
         }
+    }
+    
+    private void RefreshRoomList() {
+        GameData.clearRoomList();
+        Network.Send("REFRESHROOMLIST");
+        GameData.RoomList = (ArrayList) Network.Receive();
+        room.setListData(GameData.RoomList.toArray());
     }
     
 }

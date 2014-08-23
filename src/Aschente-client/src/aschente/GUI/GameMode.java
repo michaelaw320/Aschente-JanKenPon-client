@@ -28,6 +28,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -92,12 +95,16 @@ public class GameMode extends Scene implements ActionListener {
         gameFrame.repaint();
         this.LoadContent();
         buttons("disabled");
+        aschente.setVisible(true);
+        aschente.setEnabled(false);
+            UpdateRoomData();
+        aschente.setEnabled(true);
     }
     
     @Override
     public void Update() {
         if(mode == 0) {
-            aschente.setVisible(true);   
+            aschente.setVisible(true);
         } else if (mode == 1) {
             aschente.setVisible(false);
             buttons("enabled");
@@ -277,6 +284,18 @@ public class GameMode extends Scene implements ActionListener {
         stopThread = true;
         counter.interrupt();
         mode = 3;
+    }
+    
+    private void UpdateRoomData() {
+        try {
+            Network.connection.setSoTimeout(0);
+        } catch (SocketException ex) {
+            Logger.getLogger(GameMode.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Network.Send("REFRESHGAMEDATA");
+        GameData.Player2Name = (String) Network.Receive();
+        GameData.ScoreP2 = (int) Network.Receive();
+        GameData.ToRound = (int) Network.Receive(); 
     }
     
 }
