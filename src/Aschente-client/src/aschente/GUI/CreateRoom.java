@@ -105,6 +105,7 @@ public class CreateRoom extends Scene implements ActionListener, KeyListener {
                 Network.Send("CREATEROOM");
                 System.out.println(Network.Receive());
                 Network.Send(roomName);
+                GameData.wait = true;
                 //to do duplicate room handling
                 gameFrame.removeKeyListener(this);
                 SceneManager.SwitchScene("GameMode");

@@ -34,6 +34,7 @@ public class GameData {
     public static int Round = 1; 
     public static int ToRound;
     public static volatile int Countdown;
+    public static boolean wait = false;
     
     /**
      * Reset room list

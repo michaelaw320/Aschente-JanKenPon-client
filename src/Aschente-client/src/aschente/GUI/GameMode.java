@@ -69,7 +69,7 @@ public class GameMode extends Scene implements ActionListener {
         aschente = new JButton("ASCHENTE");
         aschente.setFont(NGNLFont);
         nothing = new JButton();
-        mode = 0;
+        mode = -1;
         stopThread = false;
         ConstructButtonListener();
     }
@@ -95,16 +95,33 @@ public class GameMode extends Scene implements ActionListener {
         gameFrame.repaint();
         this.LoadContent();
         buttons("disabled");
-        aschente.setVisible(true);
-        aschente.setEnabled(false);
-            UpdateRoomData();
-        aschente.setEnabled(true);
     }
     
     @Override
     public void Update() {
-        if(mode == 0) {
+        if (mode == -1) {
             aschente.setVisible(true);
+            aschente.setEnabled(false);
+            while(GameData.wait) {
+                Network.Send("READY?");
+                System.out.println("READY?");
+                if(Network.Receive().equals("NOTYET")) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(GameMode.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    GameData.wait = false;
+                }
+            }
+            UpdateRoomData();
+            aschente.setEnabled(true); 
+            mode = 0;
+        }
+        else if(mode == 0) {
+            aschente.setVisible(true);
+            
         } else if (mode == 1) {
             aschente.setVisible(false);
             buttons("enabled");
@@ -287,11 +304,6 @@ public class GameMode extends Scene implements ActionListener {
     }
     
     private void UpdateRoomData() {
-        try {
-            Network.connection.setSoTimeout(0);
-        } catch (SocketException ex) {
-            Logger.getLogger(GameMode.class.getName()).log(Level.SEVERE, null, ex);
-        }
         Network.Send("REFRESHGAMEDATA");
         GameData.Player2Name = (String) Network.Receive();
         GameData.ScoreP2 = (int) Network.Receive();
