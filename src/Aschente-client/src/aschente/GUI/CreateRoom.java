@@ -103,7 +103,7 @@ public class CreateRoom extends Scene implements ActionListener, KeyListener {
             } else {
                 GameData.RoomName = roomName;
                 Network.Send("CREATEROOM");
-                System.out.println(Network.Receive());
+                Network.Receive();
                 Network.Send(roomName);
                 GameData.wait = true;
                 //to do duplicate room handling

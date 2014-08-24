@@ -98,9 +98,8 @@ public class JoinRoom extends Scene implements ActionListener {
             RefreshRoomList();
         } else if (e.getSource().equals(joinButton)) {
             Network.Send("JOINROOM");
-            System.out.println(Network.Receive());
+            Network.Receive();
             Network.Send(room.getSelectedValue());
-            System.out.println(room.getSelectedValue());
             GameData.RoomName = room.getSelectedValue().toString();
             SceneManager.SwitchScene("GameMode");
         }

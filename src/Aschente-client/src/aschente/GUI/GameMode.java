@@ -26,6 +26,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -33,12 +35,15 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 /**
  *
  * @author Michael
  */
-public class GameMode extends Scene implements ActionListener {
+public class GameMode extends Scene implements ActionListener, WindowListener {
 
     private JButton rock;
     private JButton scissor;
@@ -79,6 +84,7 @@ public class GameMode extends Scene implements ActionListener {
         paper.addActionListener(this);
         aschente.addActionListener(this);
         nothing.addActionListener(this);
+        gameFrame.addWindowListener(this);
     }
 
     public void LoadContent() {
@@ -98,6 +104,12 @@ public class GameMode extends Scene implements ActionListener {
     
     @Override
     public void Update() {
+        if (GameData.Round > GameData.ToRound && !GameData.wait && GameData.ToRound != 0 && mode < 4) {
+            mode = 4;
+            GameData.Countdown = 0;
+            Draw();
+        }
+        
         if (mode == -1) {
             aschente.setVisible(true);
             aschente.setEnabled(false);
@@ -106,8 +118,8 @@ public class GameMode extends Scene implements ActionListener {
                     if(Network.ReceiveWait().equals("GAMESTART")) {
                         GameData.wait = false;
                     }
+                    Draw();
                 } catch (IOException ex) {
-                    System.out.println("STILL WAITING...");
                 }
             }
             UpdateRoomData();
@@ -116,7 +128,6 @@ public class GameMode extends Scene implements ActionListener {
         }
         else if(mode == 0) {
             aschente.setVisible(true);
-            
         } else if (mode == 1) {
             aschente.setVisible(false);
             buttons("enabled");
@@ -124,21 +135,68 @@ public class GameMode extends Scene implements ActionListener {
             countdown();
             mode = 2;
             gameFrame.repaint();
-        } else if (mode == 3) {
+        }  //mode 2 = countdown active
+        else if (mode == 3) {
             /* Wait for network before returning to mode 0 or 1 */
-            System.out.println("MODE 3");
+            String received;
+            received = (String) Network.Receive();
+            if(received.equals("WIN")) {
+                GameData.Score++;
+                JOptionPane pane = new JOptionPane("YOU WIN!!");
+                final JDialog dialog = pane.createDialog("YOU WIN!!");
+                Timer timer = new Timer(3000, new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                        dialog.dispose();
+                }
+                }); 
+                timer.setRepeats(false);
+                timer.start();
+                dialog.setVisible(true);
+            } else if (received.equals("LOSE")) {
+                GameData.ScoreP2++;
+                JOptionPane pane = new JOptionPane("YOU LOSE");
+                final JDialog dialog = pane.createDialog("YOU LOSE");
+                Timer timer = new Timer(3000, new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                        dialog.dispose();
+                }
+                }); 
+                timer.setRepeats(false);
+                timer.start();
+                dialog.setVisible(true);
+            } else if (received.equals("DRAW")) {
+                JOptionPane pane = new JOptionPane("DRAW");
+                final JDialog dialog = pane.createDialog("DRAW");
+                Timer timer = new Timer(3000, new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                        dialog.dispose();
+                }
+                }); 
+                timer.setRepeats(false);
+                timer.start();
+                dialog.setVisible(true);
+            }
             stopThread = false;
             mode = 1;
             gameFrame.repaint();
         } else if (mode == 4) {
-            
+            mode = 5;
+            Network.Send("SAVEGAME");
+        } else if (mode == 5) {
+            int response = JOptionPane.showConfirmDialog(gameFrame, "PLAY AGAIN?", "Confirm",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if(response == JOptionPane.YES_OPTION) {
+                Network.Send("NEWGAME");
+                GameData.Round = 0;
+                GameData.Player2Name = "";
+                GameData.ScoreP2 = 0;
+                SceneManager.SwitchScene("MainMenu");
+            } else {
+                mode = 6;
+            }
+        } else if (mode == 6) {
+            //do nothing
         }
         
-        if (GameData.Round == GameData.ToRound) {
-            mode = 4;
-            GameData.Countdown = 0;
-            Draw();
-        }
     }
 
     @Override
@@ -235,26 +293,30 @@ public class GameMode extends Scene implements ActionListener {
             buttons("disabled");
             countdownStop();
             GameData.Round++;
+            Network.Send("ROCK");
         } else if (e.getSource().equals(scissor)) {
             //network send scissor
             buttons("disabled");
             countdownStop();
             GameData.Round++;
+            Network.Send("SCISSOR");
         } else if (e.getSource().equals(paper)) {
             //network send paper
             buttons("disabled");
             countdownStop();
             GameData.Round++;
+            Network.Send("PAPER");
         } else if (e.getSource().equals(nothing)) {
             //network send nothing
             buttons("disabled");
             countdownStop();
             GameData.Round++;
-            System.out.println("NOTHING PRESSED");
+            Network.Send("NOTHINGSELECTED");
         } else if (e.getSource().equals(aschente)) {
+            aschente.setEnabled(false);
+            Draw();
             Network.Send("ASCHENTE!");
             GameData.wait = true;
-            aschente.setEnabled(false);
             while (GameData.wait) {
                 try {
                     if(Network.ReceiveWait().equals("ASCHENTE!")) {
@@ -264,8 +326,6 @@ public class GameMode extends Scene implements ActionListener {
 
                 }
             }
-            gameFrame.repaint();
-            paint(gameFrame.getGraphics());
             mode = 1;
         } 
     }
@@ -318,4 +378,32 @@ public class GameMode extends Scene implements ActionListener {
         paint(gameFrame.getGraphics());
     }
 
+    @Override
+    public void windowOpened(WindowEvent e) {
+     }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        Network.Send("SHUTDOWN");
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+     }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+     }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+     }
 }
