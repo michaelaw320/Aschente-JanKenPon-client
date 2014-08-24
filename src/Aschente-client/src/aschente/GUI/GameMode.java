@@ -71,7 +71,6 @@ public class GameMode extends Scene implements ActionListener, WindowListener {
         aschente = new JButton("ASCHENTE");
         aschente.setFont(NGNLFont);
         nothing = new JButton();
-        mode = -1;
         stopThread = false;
         ConstructButtonListener();
     }
@@ -98,15 +97,11 @@ public class GameMode extends Scene implements ActionListener, WindowListener {
         gameFrame.repaint();
         this.LoadContent();
         buttons("disabled");
+        mode = -1;
     }
     
     @Override
     public void Update() {
-        if (GameData.Round > GameData.ToRound && !GameData.wait && GameData.ToRound != 0 && mode < 4) {
-            mode = 4;
-            GameData.Countdown = 0;
-            Draw();
-        }
         
         if (mode == -1) {
             aschente.setVisible(true);
@@ -187,12 +182,20 @@ public class GameMode extends Scene implements ActionListener, WindowListener {
                 GameData.Round = 0;
                 GameData.Player2Name = "";
                 GameData.ScoreP2 = 0;
+                GameData.ToRound = 0;
+                mode = -1;
                 SceneManager.SwitchScene("MainMenu");
             } else {
                 mode = 6;
             }
         } else if (mode == 6) {
             //do nothing
+        }
+        
+        if (GameData.Round > GameData.ToRound && !GameData.wait && GameData.ToRound != 0 && mode < 3) {
+            mode = 4;
+            GameData.Countdown = 0;
+            Draw();
         }
         
     }
